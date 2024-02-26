@@ -1,36 +1,39 @@
-import { Imagem, Preco, Titulo } from './styles'
 import Tag from '../Tag'
 import Button from '../Button'
-import { useEffect, useState } from 'react'
-import { Game } from '../../pages/Home'
-import { formataPreco } from '../ProductList'
-import { useGetFeatureGameQuery } from '../../services/api'
+import Loader from '../Loader'
+
+import { useGetFeaturedGameQuery } from '../../services/api'
+
+import * as S from './styles'
+import { parseToBrl } from '../../utils'
+
 const Banner = () => {
-  const { data: game, isLoading } = useGetFeatureGameQuery()
+  const { data: game } = useGetFeaturedGameQuery()
 
   if (!game) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
+
   return (
-    <Imagem style={{ backgroundImage: `url(${game.media.cover})` }}>
+    <S.Image style={{ backgroundImage: `url(${game.media.cover})` }}>
       <div className="container">
-        <Tag size="big">Destaque do Dia</Tag>
+        <Tag size="big">Destaque do dia</Tag>
         <div>
-          <Titulo>{game.name}</Titulo>
-          <Preco>
-            De <span>{formataPreco(game.prices.old)}</span> <br />
-            Por apenas {formataPreco(game.prices.current)}
-          </Preco>
+          <S.Title>{game.name}</S.Title>
+          <S.Prices>
+            De <span>{parseToBrl(game.prices.old)}</span> <br />
+            por apenas {parseToBrl(game.prices.current)}
+          </S.Prices>
         </div>
         <Button
           type="link"
           to={`/product/${game.id}`}
-          title="Clique para aproveitar esta oferta"
+          title="Clique aqui para aproveitar esta oferta"
         >
           Aproveitar
         </Button>
       </div>
-    </Imagem>
+    </S.Image>
   )
 }
 

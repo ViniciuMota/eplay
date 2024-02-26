@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Game } from '../../pages/Home'
 
 type CartState = {
   items: Game[]
@@ -10,16 +9,18 @@ const initialState: CartState = {
   items: [],
   isOpen: false
 }
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     add: (state, action: PayloadAction<Game>) => {
       const game = state.items.find((item) => item.id === action.payload.id)
+
       if (!game) {
         state.items.push(action.payload)
       } else {
-        alert('O jogo já esta no carrinho')
+        alert('O jogo já está no carrinho')
       }
     },
     remove: (state, action: PayloadAction<number>) => {
@@ -30,9 +31,12 @@ const cartSlice = createSlice({
     },
     close: (state) => {
       state.isOpen = false
+    },
+    clear: (state) => {
+      state.items = []
     }
   }
 })
 
-export const { add, remove, open, close } = cartSlice.actions
+export const { add, open, close, remove, clear } = cartSlice.actions
 export default cartSlice.reducer
